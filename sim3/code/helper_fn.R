@@ -96,7 +96,7 @@ make_ows_data_survival <- function(
 #' @return the true value of four risk estimators
 get_ows_truth1_survival <- function(
   n = 1e6, covid_rate = -9.3, 
-  t0 = 66, study_stop = 67
+  t0 = 67, study_stop = 67
 ){
   stopifnot(t0 <= study_stop)
   
@@ -156,7 +156,7 @@ get_ows_truth1_survival <- function(
 #' @param t0 the time for evaluation
 #' @param return a list of the targeted results
 get_ows_truth2_survival <- function(n = 1e6, covid_rate = -9.3, 
-                           t0 = 66, study_stop = 67){
+                           t0 = 67, study_stop = 67){
   stopifnot(t0 <= study_stop)
   
   # baseline covariates

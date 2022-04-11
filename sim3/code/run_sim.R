@@ -2,13 +2,13 @@
 #                               SIMULATION CODE                             #
 #############################################################################
 
-# specify the path
-here::i_am("code/run_sim.R")
-# load helper functions
-source(here::here("code", "helper_fn.R"))
+# # specify the path
+# here::i_am("code/run_sim.R")
+# # load helper functions
+# source(here::here("code", "helper_fn.R"))
 
 # on cluster
-# source("/home/jran2/vaccine/JnJ/rscript/helper_fn.R")
+source("/home/jran2/vaccine/JnJ/rscript/helper_fn.R")
 
 # libraries
 library(survtmle)
@@ -25,9 +25,8 @@ fitting = function(X, cens_rate, covid_rate, set_t0, study_stop, version){
   set.seed(X)
   # simulate data
   data <- make_ows_data_survival(cens_rate = cens_rate, covid_rate = covid_rate, study_stop = study_stop)
-  # data <- make_ows_data_survival(n = 1000, cens_rate = cens_rate, covid_rate = covid_rate, study_stop = study_stop)
   # save dataset
-  save(data, file = paste0("/projects/dbenkes/jialu/JnJ_datasets/data_", X, ".RData"))
+  # save(data, file = paste0("/projects/dbenkes/jialu/vaccine/JnJ/JnJ_datasets3/data_", X, ".RData"))
   
   # get sampling probabilities
   glm_fit <- glm(random_subcohort ~ age*race*risk*vax,
@@ -122,9 +121,9 @@ parameter_grid = expand.grid(
   # cens_rate values to be considered
   # cens_rate = seq(-10, -5, 1),
   # covid_rate value to be considered
-  # covid_rate = c(-10, -8, 0.1),
+  covid_rate = c(-9.3, -5),
   # t0
-  set_t0 = 65,
+  set_t0 = 67,
   # study_stop
   # study_stop = 67,
   # seed
@@ -137,11 +136,12 @@ parameter_grid = expand.grid(
 args = commandArgs(trailingOnly = TRUE)
 iter = as.numeric(args[1])
 # parameters
+covid_rate = parameter_grid[iter,]$covid_rate
 set_t0 = parameter_grid[iter,]$set_t0
 X = parameter_grid[iter,]$X
 version = parameter_grid[iter,]$version
 # fit and save
-result = fitting(X = X, cens_rate = -8, covid_rate = -9.3, set_t0 = set_t0, study_stop = 67, version = version)
-save(result, file = paste0("/home/jran2/vaccine/JnJ/result/X", X,
+result = fitting(X = X, cens_rate = -8, covid_rate = covid_rate, set_t0 = set_t0, study_stop = 67, version = version)
+save(result, file = paste0("/projects/dbenkes/jialu/vaccine/JnJ/results/covid_rate=", covid_rate, "/X", X,
                            "_t", set_t0, "_version_", version, ".RData"))
 
